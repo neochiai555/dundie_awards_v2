@@ -20,6 +20,7 @@ public class Employee {
     private Integer dundieAwards;
 
     @ManyToOne
+    @JoinColumn(name = "organization_id")
     private Organization organization;
 
     public Employee() {

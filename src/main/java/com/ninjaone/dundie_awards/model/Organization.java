@@ -1,5 +1,7 @@
 package com.ninjaone.dundie_awards.model;
 
+import java.util.Set;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +14,9 @@ public class Organization {
 
   @Column(name = "name")
   private String name;
+  
+  @OneToMany
+  private Set<Employee> employess;
 
   public Organization() {
 
