@@ -1,9 +1,7 @@
 package com.ninjaone.dundie_awards.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,9 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ninjaone.dundie_awards.AwardsCache;
 import com.ninjaone.dundie_awards.model.Employee;
-import com.ninjaone.dundie_awards.model.Organization;
-import com.ninjaone.dundie_awards.repository.EmployeeRepository;
-import com.ninjaone.dundie_awards.repository.OrganizationRepository;
+import com.ninjaone.dundie_awards.service.EmployeeService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,23 +31,20 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RestController
 public class EmployeeController { 
 
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
     //private final ActivityRepository activityRepository;
-    private final OrganizationRepository organizationRepository;
     //private final MessageBroker messageBroker;
     
     @Qualifier("awardsCache")
     private final AwardsCache awardsCache;
 
     public EmployeeController(
-    		EmployeeRepository employeeRepository,
+    		EmployeeService employeeService,
     		//ActivityRepository activityRepository,
-    		OrganizationRepository organizationRepository,
     		//MessageBroker messageBroker,  
     		AwardsCache awardsCache) {
-    	this.employeeRepository = employeeRepository;
+    	this.employeeService = employeeService;
     	//this.activityRepository = activityRepository;
-    	this.organizationRepository = organizationRepository;
     	//this.messageBroker = messageBroker;
     	this.awardsCache = awardsCache;
     }
@@ -66,7 +59,7 @@ public class EmployeeController {
     })
     @GetMapping("/employees")
     public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+        return employeeService.getAllEmployees();
     }
 
     // create employee rest api
@@ -79,21 +72,7 @@ public class EmployeeController {
     })
     @PostMapping("/employees")
     public Employee createEmployee(@RequestBody Employee employee) {
-        List<Organization> organizations = organizationRepository.findByName(employee.getOrganization().getName());
-        Organization organization = null;
-        if (organizations.isEmpty()) {
-        	organization = new Organization();
-        	organization.setName(employee.getOrganization().getName());
-        	organizationRepository.save(organization);
-        } else {
-        	organization = organizations.get(0);
-        }
-        employee.setOrganization(organization);
-        employee = employeeRepository.save(employee);
-        
-        awardsCache.setTotalAwards(awardsCache.getTotalAwards() + employee.getDundieAwards());
-        
-        return employee;
+    	return employeeService.createEmployee(employee);
     }
 
     // get employee by id rest api
@@ -107,7 +86,7 @@ public class EmployeeController {
     @Parameter(in = ParameterIn.PATH, name ="id" ,schema = @Schema(type = "long"))
     @GetMapping("/employees/{id}")
     public ResponseEntity<Employee> getEmployeeById(@Parameter(description = "Employee ID") @PathVariable(value = "id") Long id) {
-        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        Optional<Employee> optionalEmployee = employeeService.getEmployeeById(id);
         if (optionalEmployee.isPresent()) {
             return ResponseEntity.ok(optionalEmployee.get());
         } else {
@@ -126,37 +105,11 @@ public class EmployeeController {
     @Parameter(in = ParameterIn.PATH, name ="id" ,schema = @Schema(type = "long"))
     @PutMapping("/employees/{id}")
     public ResponseEntity<Employee> updateEmployee(@Parameter(description = "Employee ID") @PathVariable(value = "id") Long id, @RequestBody Employee employeeDetails) {
-        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
-        if (!optionalEmployee.isPresent()) {
+        Optional<Employee> updatedEmployee = employeeService.updateEmployee(id, employeeDetails);
+        if (!updatedEmployee.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        Employee employee = optionalEmployee.get();
-        employee.setFirstName(employeeDetails.getFirstName());
-        employee.setLastName(employeeDetails.getLastName());
-        
-        Integer deltaDundieAwards =
-        		Objects.requireNonNullElse(employeeDetails.getDundieAwards(), 0) 
-        		- Objects.requireNonNullElse(employee.getDundieAwards(), 0);
-        
-        employee.setDundieAwards(employeeDetails.getDundieAwards());
-        
-        List<Organization> organizations = organizationRepository.findByName(employeeDetails.getOrganization().getName());
-        Organization organization = null;
-        if (organizations.isEmpty()) {
-        	organization = new Organization();
-        	organization.setName(employeeDetails.getOrganization().getName());
-        	organizationRepository.save(organization);
-        } else {
-        	organization = organizations.get(0);
-        }
-        employee.setOrganization(organization);
-
-        Employee updatedEmployee = employeeRepository.save(employee);
-        
-        awardsCache.setTotalAwards(awardsCache.getTotalAwards() + deltaDundieAwards);
-        
-        return ResponseEntity.ok(updatedEmployee);
+        return ResponseEntity.ok(updatedEmployee.get());
     }
 
     // delete employee rest api
@@ -169,15 +122,11 @@ public class EmployeeController {
     })
     @DeleteMapping("/employees/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteEmployee(@Parameter(description = "Employee ID") @PathVariable(value = "id") Long id) {
-        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
-        if (!optionalEmployee.isPresent()) {
+        Optional<Map<String, Boolean>> deletedEmployee = employeeService.deleteEmployee(id);
+        if (!deletedEmployee.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        Employee employee = optionalEmployee.get();
-        employeeRepository.delete(employee);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(deletedEmployee.get());
     }
 }
