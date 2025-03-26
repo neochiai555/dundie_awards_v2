@@ -12,8 +12,9 @@ public class OrganizationDto {
 
   }
 
-  public OrganizationDto(String name) {
+  public OrganizationDto(long id, String name) {
     super();
+    this.id = id;
     this.name = name;
   }
 

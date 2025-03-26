@@ -13,8 +13,9 @@ public class EmployeeDto {
 
     }
 
-    public EmployeeDto(String firstName, String lastName, OrganizationDto organization, Integer dundieAwards) {
+    public EmployeeDto(long id, String firstName, String lastName, OrganizationDto organization, Integer dundieAwards) {
         super();
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.organization = organization;

@@ -1,5 +1,6 @@
 package com.ninjaone.dundie_awards.controller;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,9 @@ public class IndexController {
 
     private EmployeeRepository employeeRepository;
     private ActivityRepository activityRepository;
+    @Qualifier("messageBroker")
     private MessageBroker messageBroker;
+    @Qualifier("awardsCache")
     private AwardsCache awardsCache;
     
     public IndexController(

@@ -1,5 +1,6 @@
 package com.ninjaone.dundie_awards.controller;
 
+import java.rmi.UnexpectedException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -18,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ninjaone.dundie_awards.AwardsCache;
+import com.ninjaone.dundie_awards.MessageBroker;
 import com.ninjaone.dundie_awards.dto.EmployeeDto;
+import com.ninjaone.dundie_awards.exception.OrganizationNotFoundException;
 import com.ninjaone.dundie_awards.model.Employee;
 import com.ninjaone.dundie_awards.service.EmployeeService;
+import com.ninjaone.dundie_awards.service.OrganizationService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,6 +39,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 public class EmployeeController { 
 
     private final EmployeeService employeeService;
+    private final OrganizationService organizationService;
     private final ConversionService conversionService;
     //private final ActivityRepository activityRepository;
     //private final MessageBroker messageBroker;
@@ -44,11 +49,13 @@ public class EmployeeController {
 
     public EmployeeController(
     		EmployeeService employeeService,
+    		OrganizationService organizationService,
     		ConversionService conversionService,
     		//ActivityRepository activityRepository,
     		//MessageBroker messageBroker,  
     		AwardsCache awardsCache) {
     	this.employeeService = employeeService;
+    	this.organizationService = organizationService;
     	this.conversionService = conversionService;
     	//this.activityRepository = activityRepository;
     	//this.messageBroker = messageBroker;
@@ -131,9 +138,30 @@ public class EmployeeController {
     public ResponseEntity<Map<String, Boolean>> deleteEmployee(@Parameter(description = "Employee ID") @PathVariable(value = "id") Long id) {
         Optional<Map<String, Boolean>> deletedEmployee = employeeService.deleteEmployee(id);
         if (!deletedEmployee.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(deletedEmployee.get());
     }
+    
+    // give dundie award to organization
+    @Operation(summary = "Give dundie award to organization employees")
+    @ApiResponses(value = { 
+      @ApiResponse(responseCode = "200", description = "Success", 
+        content = { @Content(mediaType = "application/json", 
+          schema = @Schema(implementation = Map.class) 
+        )}) 
+    })
+    @PostMapping("/give-dundie-awards/{organizationId}")
+    public ResponseEntity<Object> giveDundieAwards(@Parameter(description = "Organization ID") @PathVariable(value = "organizationId") Long organizationId) {
+        try {
+        	organizationService.giveDundieAwards(organizationId);
+        } catch (OrganizationNotFoundException e) {
+        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (UnexpectedException e) {
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
+        
+        return ResponseEntity.ok().build();
+    }    
 }

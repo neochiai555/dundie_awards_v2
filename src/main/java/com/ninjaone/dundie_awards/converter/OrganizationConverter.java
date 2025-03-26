@@ -10,7 +10,7 @@ public class OrganizationConverter
 	
 	@Override
 	public OrganizationDto convert(Organization source) {
-		return new OrganizationDto(source.getName());
+		return new OrganizationDto(source.getId(), source.getName());
 	}
 	
 }

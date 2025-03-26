@@ -11,7 +11,7 @@ public class EmployeeConverter implements Converter<Employee, EmployeeDto> {
 	@Override
 	public EmployeeDto convert(Employee source) {
 		OrganizationDto organizatioDto = new OrganizationConverter().convert(source.getOrganization());
-		return new EmployeeDto(source.getFirstName(), source.getLastName(), organizatioDto, source.getDundieAwards());
+		return new EmployeeDto(source.getId(), source.getFirstName(), source.getLastName(), organizatioDto, source.getDundieAwards());
 	}
 
 }
