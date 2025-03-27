@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.ninjaone.dundie_awards.AwardsCache;
-import com.ninjaone.dundie_awards.MessageBroker;
+import com.ninjaone.dundie_awards.messaging.MessageBroker;
 import com.ninjaone.dundie_awards.repository.ActivityRepository;
 import com.ninjaone.dundie_awards.repository.EmployeeRepository;
 

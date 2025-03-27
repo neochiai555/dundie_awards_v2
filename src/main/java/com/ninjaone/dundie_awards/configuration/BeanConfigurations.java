@@ -3,22 +3,24 @@ package com.ninjaone.dundie_awards.configuration;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 import com.ninjaone.dundie_awards.AwardsCache;
-import com.ninjaone.dundie_awards.MessageBroker;
+import com.ninjaone.dundie_awards.messaging.MessageBroker;
 import com.ninjaone.dundie_awards.service.ActivityService;
+import com.ninjaone.dundie_awards.service.OrganizationBusinessService;
 
 @Configuration
 public class BeanConfigurations {
 	
 	private final ActivityService activityService;
+	private final OrganizationBusinessService organizationBusinessService;
 	
-	public BeanConfigurations (ActivityService activityService) {
+	public BeanConfigurations (ActivityService activityService, OrganizationBusinessService organizationBusinessService) {
 		this.activityService = activityService;
+		this.organizationBusinessService = organizationBusinessService;
 	}
 
     @Bean(name = "awardsCache")
@@ -32,6 +34,6 @@ public class BeanConfigurations {
     @Order(Ordered.LOWEST_PRECEDENCE)
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
     MessageBroker messageBroker() {
-        return new MessageBroker(activityService);
+        return new MessageBroker(activityService, organizationBusinessService);
     }
 }

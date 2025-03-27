@@ -5,7 +5,7 @@ const stompClient = new StompJs.Client({
 stompClient.onConnect = (frame) => {
     setConnected(true);
     console.log('Connected: ' + frame);
-    stompClient.subscribe('/topic/messages', (message) => {
+    stompClient.subscribe('/topic/responsemessages', (message) => {
         refreshMessages(JSON.parse(message.body));
     });
 };
@@ -41,26 +41,6 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function sendName() {
-    stompClient.publish({
-        destination: "/app/message",
-        body: JSON.stringify({'occuredAt': null, 'event': $("#name").val()})
-    });
-}
-
 function refreshMessages(message) {
-	/*
-    $("#queueMessages").append(	
-	"<tr> " + 
-	    "<th>" + message.occuredAt + "</th>" +
-	    "<th>" + message.event + "</th>" +
-	"</tr>"); */
 	location.reload(true);
 }
-
-$(function () {
-    $("form").on('submit', (e) => e.preventDefault());
-    $( "#connect" ).click(() => connect());
-    $( "#disconnect" ).click(() => disconnect());
-    $( "#send" ).click(() => sendName());
-});

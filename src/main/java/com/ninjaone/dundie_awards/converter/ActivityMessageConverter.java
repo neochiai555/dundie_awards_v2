@@ -12,9 +12,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ninjaone.dundie_awards.dto.ActivityDto;
+import com.ninjaone.dundie_awards.messaging.message.ActivityMessageRequest;
 
 @Component
-public class MessageActivityConverter implements MessageConverter {
+public class ActivityMessageConverter implements MessageConverter {
 
 	@Override
 	public Object fromMessage(Message<?> message, Class<?> targetClass) {
@@ -23,15 +24,15 @@ public class MessageActivityConverter implements MessageConverter {
 		mapper.registerModule(new JavaTimeModule());
 		mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		try {
-			return mapper.readValue((byte[]) message.getPayload(), ActivityDto.class);
+			return mapper.readValue((byte[]) message.getPayload(), ActivityMessageRequest.class);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			return null;
 		}
 	}
 
 	@Override
 	public Message<?> toMessage(Object payload, MessageHeaders headers) {
-		// TODO Auto-generated method stub
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new JavaTimeModule());
 		mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);

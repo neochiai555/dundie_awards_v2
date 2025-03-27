@@ -18,4 +18,8 @@ public class AwardsCache {
     public void addOneAward(){
         this.totalAwards += 1;
     }
+    
+    public void subtractOneAward(){
+        this.totalAwards -= 1;
+    }
 }

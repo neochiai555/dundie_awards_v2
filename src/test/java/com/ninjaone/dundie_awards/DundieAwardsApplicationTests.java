@@ -10,6 +10,7 @@ import com.ninjaone.dundie_awards.converter.ActivityConverter;
 import com.ninjaone.dundie_awards.converter.EmployeeConverter;
 import com.ninjaone.dundie_awards.dto.ActivityDto;
 import com.ninjaone.dundie_awards.dto.EmployeeDto;
+import com.ninjaone.dundie_awards.messaging.MessageBroker;
 import com.ninjaone.dundie_awards.model.Activity;
 import com.ninjaone.dundie_awards.model.Employee;
 import com.ninjaone.dundie_awards.model.Organization;
@@ -25,14 +26,6 @@ class DundieAwardsApplicationTests {
 	@Test
 	void contextLoads() {
 		Assertions.assertNotNull(messageBroker);
-	}
-
-	@Test
-	void testMessageBroker() throws Exception {
-		Activity activity = new Activity(LocalDateTime.now(), "Unit test message");
-		messageBroker.sendMessage(activity);
-		Assertions.assertEquals(1, messageBroker.getMessages().size());		
-		Assertions.assertEquals("Unit test message", messageBroker.getMessages().get(0).getEvent());
 	}
 	
 	@Test

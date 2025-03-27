@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ninjaone.dundie_awards.AwardsCache;
-import com.ninjaone.dundie_awards.MessageBroker;
+import com.ninjaone.dundie_awards.dto.ActivityDto;
 import com.ninjaone.dundie_awards.exception.OrganizationNotFoundException;
-import com.ninjaone.dundie_awards.model.Activity;
+import com.ninjaone.dundie_awards.messaging.MessageBroker;
 import com.ninjaone.dundie_awards.model.Employee;
 import com.ninjaone.dundie_awards.model.Organization;
 import com.ninjaone.dundie_awards.repository.EmployeeRepository;
@@ -62,12 +62,13 @@ public class OrganizationService {
 	 		}
 	 		
 	 		messageBroker.initMessageBroker();
-	 		messageBroker.sendMessage(new Activity(LocalDateTime.now(), String.format("Dundie awards given to organization ID = %d", organizationId)));
+	 		messageBroker.sendMessageCreate(new ActivityDto(LocalDateTime.now(),
+	 				String.format("Dundie awards given to organization ID = %d", organizationId)), organizationId);
 		} catch (OrganizationNotFoundException e) {
 			throw(e);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new UnexpectedException(String.format("Error giving dundie awards to employees of organization ID = %d.", organizationId), e);
 		}
-	}
+	}	
 }

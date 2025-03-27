@@ -1,4 +1,4 @@
-package com.ninjaone.dundie_awards;
+package com.ninjaone.dundie_awards.messaging;
 
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;

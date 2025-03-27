@@ -78,12 +78,14 @@
             <tr>
                 <th>Occurred At</th>
                 <th>Event</th>
+                <th>type</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="activity : ${queueMessages}">
-                <th th:text="${activity.occuredAt}"></th>
-                <th th:text="${activity.event}"></th>
+            <tr th:each="activityMessage : ${queueMessages}">
+                <th th:text="${activityMessage.activityDto.occuredAt}"></th>
+                <th th:text="${activityMessage.activityDto.event}"></th>
+                <th th:text="${activityMessage.type}"></th>
             </tr>
             </tbody>
         </table>
