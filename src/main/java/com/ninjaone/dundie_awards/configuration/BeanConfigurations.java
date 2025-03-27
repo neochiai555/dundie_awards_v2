@@ -10,9 +10,16 @@ import org.springframework.core.annotation.Order;
 
 import com.ninjaone.dundie_awards.AwardsCache;
 import com.ninjaone.dundie_awards.MessageBroker;
+import com.ninjaone.dundie_awards.service.ActivityService;
 
 @Configuration
 public class BeanConfigurations {
+	
+	private final ActivityService activityService;
+	
+	public BeanConfigurations (ActivityService activityService) {
+		this.activityService = activityService;
+	}
 
     @Bean(name = "awardsCache")
     @Order(Ordered.LOWEST_PRECEDENCE)
@@ -25,6 +32,6 @@ public class BeanConfigurations {
     @Order(Ordered.LOWEST_PRECEDENCE)
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
     MessageBroker messageBroker() {
-        return new MessageBroker();
+        return new MessageBroker(activityService);
     }
 }

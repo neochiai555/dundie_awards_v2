@@ -6,7 +6,7 @@ stompClient.onConnect = (frame) => {
     setConnected(true);
     console.log('Connected: ' + frame);
     stompClient.subscribe('/topic/messages', (message) => {
-        showGreeting(JSON.parse(message.body).event);
+        refreshMessages(JSON.parse(message.body));
     });
 };
 
@@ -28,7 +28,7 @@ function setConnected(connected) {
     else {
         $("#conversation").hide();
     }
-    $("#greetings").html("");
+    $("#queueMessages").html("");
 }
 
 function connect() {
@@ -48,8 +48,14 @@ function sendName() {
     });
 }
 
-function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+function refreshMessages(message) {
+	/*
+    $("#queueMessages").append(	
+	"<tr> " + 
+	    "<th>" + message.occuredAt + "</th>" +
+	    "<th>" + message.event + "</th>" +
+	"</tr>"); */
+	location.reload(true);
 }
 
 $(function () {

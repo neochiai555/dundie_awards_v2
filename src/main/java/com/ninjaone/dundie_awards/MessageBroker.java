@@ -19,15 +19,17 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ninjaone.dundie_awards.converter.MessageActivityConverter;
 import com.ninjaone.dundie_awards.dto.ActivityDto;
 import com.ninjaone.dundie_awards.model.Activity;
+import com.ninjaone.dundie_awards.service.ActivityService;
 
 @Component
 public class MessageBroker {
 
     private List<Activity> messages = new LinkedList<>();
     private MessageSessionHandler sessionHandler = null;
+    private final ActivityService activityService;
     
-    public MessageBroker() {
-
+    public MessageBroker(ActivityService activityService) {
+    	this.activityService = activityService;
     }
     
     public void initMessageBroker() {
@@ -38,7 +40,6 @@ public class MessageBroker {
 	    	WebSocketClient webSocketClient = new StandardWebSocketClient();
 	    	WebSocketStompClient stompClient = new WebSocketStompClient(webSocketClient);
 	    	stompClient.setMessageConverter(new MessageActivityConverter());
-	    	//stompClient.setTaskScheduler(taskScheduler); // for heartbeats
 	    	String url = "ws://localhost:3001/websocket";
 	    	sessionHandler = new MessageSessionHandler();
 	     	sessionHandler.setSession(stompClient.connectAsync(url, sessionHandler).get());
@@ -53,7 +54,9 @@ public class MessageBroker {
 	     		@Override
 	     		public void handleFrame(StompHeaders headers, Object payload) {
 	     			// ...
-	     			System.out.println(payload);
+	     			ActivityDto activityDto = (ActivityDto)payload;
+	     			Activity activity = new Activity(activityDto.getOccuredAt(), activityDto.getEvent());
+	     			activityService.save(activity);
 	     		}
 
 	     	});
