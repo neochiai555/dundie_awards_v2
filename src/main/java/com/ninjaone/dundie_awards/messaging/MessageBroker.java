@@ -53,6 +53,7 @@ public class MessageBroker {
 	    	sessionHandler = new MessageSessionHandler();
 	     	sessionHandler.setSession(stompClient.connectAsync(url, sessionHandler).get());
 	     	
+	     	// Subscribe to the request messages topic to handle creating of activiy
 	     	sessionHandler.getSession().subscribe("/topic/requestmessages", new StompFrameHandler() {
 
 	     		@Override
@@ -62,6 +63,7 @@ public class MessageBroker {
 
 	     		@Override
 	     		public void handleFrame(StompHeaders headers, Object payload) {
+	     			// If payload is an activity creation request, create the activity
 	     			if (payload instanceof ActivityMessageRequest) {
 	     				ActivityMessage activityMessage = (ActivityMessage)payload;
 	     				try {	     					
@@ -69,10 +71,15 @@ public class MessageBroker {
 			     					activityMessage.getActivityDto().getOccuredAt(), 
 			     					activityMessage.getActivityDto().getEvent());
 			     			activityService.save(activity);
+			     			
+			     			// Send a success message to the response messages topic
 			     			sendMessageSuccess(activityMessage.getActivityDto(), activityMessage.getOrganizationId());
 	     				} catch (Exception e) {
 	     					try {
+	     						// Rollback dundie awards for the organization in case there is an exception creating the activity
 	     						organizationBusinessService.withDrawDundieAwards(activityMessage.getOrganizationId());
+	     						
+	     						// Send a failure message to the response messages topic
 	     						sendMessageFailure(activityMessage.getActivityDto(), activityMessage.getOrganizationId());
 	     					} catch (Exception ex) {
 	     						ex.printStackTrace();
