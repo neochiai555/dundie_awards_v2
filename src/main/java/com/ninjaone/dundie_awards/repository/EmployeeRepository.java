@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import com.ninjaone.dundie_awards.model.Employee;
 
+/**
+ * Employee repository
+ */
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Query("select e from Employee e where e.organization.id = :organizationId")

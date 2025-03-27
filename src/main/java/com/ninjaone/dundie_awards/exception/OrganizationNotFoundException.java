@@ -1,5 +1,8 @@
 package com.ninjaone.dundie_awards.exception;
 
+/**
+ * Exception for organization not found
+ */
 public class OrganizationNotFoundException extends Exception {
 	private static final long serialVersionUID = 1L;
 

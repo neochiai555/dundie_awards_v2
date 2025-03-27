@@ -2,6 +2,9 @@ package com.ninjaone.dundie_awards.dto;
 
 import java.util.Set;
 
+/**
+ * Organization DTO class
+ */
 public class OrganizationDto {
 
   private long id;

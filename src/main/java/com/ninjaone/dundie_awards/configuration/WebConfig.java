@@ -11,6 +11,7 @@ import com.ninjaone.dundie_awards.converter.OrganizationConverter;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+	// Entity to Dto converters
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new ActivityConverter());

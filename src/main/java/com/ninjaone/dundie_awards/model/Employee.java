@@ -2,6 +2,9 @@ package com.ninjaone.dundie_awards.model;
 
 import jakarta.persistence.*;
 
+/**
+ * Employee entity
+ */
 @Entity
 @Table(name = "employees")
 public class Employee {

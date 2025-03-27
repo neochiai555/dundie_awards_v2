@@ -1,5 +1,8 @@
 package com.ninjaone.dundie_awards.dto;
 
+/**
+ * Employee DTO class
+ */
 public class EmployeeDto {
 
     private long id;

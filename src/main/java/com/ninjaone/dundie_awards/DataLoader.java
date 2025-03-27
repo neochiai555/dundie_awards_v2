@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+/**
+ * Data loading class
+ */
 @Component
 public class DataLoader implements CommandLineRunner {
 

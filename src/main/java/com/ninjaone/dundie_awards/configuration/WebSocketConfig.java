@@ -6,19 +6,23 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+// Configuration of Spring Simple Message Broker
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
   @Override
   public void configureMessageBroker(MessageBrokerRegistry config) {
+	// Topics path
     config.enableSimpleBroker("/topic");
+    // 
     config.setApplicationDestinationPrefixes("/app");
   }
 
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
-    registry.addEndpoint("/websocket");
+	 // Path of endpoint for websocket connection
+	 registry.addEndpoint("/websocket");
   }
 
 }

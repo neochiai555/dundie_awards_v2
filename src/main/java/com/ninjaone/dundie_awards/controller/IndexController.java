@@ -39,6 +39,7 @@ public class IndexController {
     	this.awardsCache = awardsCache;
     }
 
+    // Redirect to the index page
     @Operation(summary = "Index page")
     @ApiResponses(value = { 
       @ApiResponse(responseCode = "200", description = "Success", 

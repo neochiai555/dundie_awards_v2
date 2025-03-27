@@ -3,6 +3,9 @@ package com.ninjaone.dundie_awards.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Activity entity
+ */
 @Entity
 @Table(name = "activities")
 public class Activity {

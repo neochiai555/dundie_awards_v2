@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ninjaone.dundie_awards.AwardsCache;
 import com.ninjaone.dundie_awards.dto.EmployeeDto;
 import com.ninjaone.dundie_awards.exception.OrganizationNotFoundException;
-import com.ninjaone.dundie_awards.messaging.MessageBroker;
 import com.ninjaone.dundie_awards.model.Employee;
 import com.ninjaone.dundie_awards.service.EmployeeService;
 import com.ninjaone.dundie_awards.service.OrganizationService;
@@ -41,8 +40,6 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final OrganizationService organizationService;
     private final ConversionService conversionService;
-    //private final ActivityRepository activityRepository;
-    //private final MessageBroker messageBroker;
     
     @Qualifier("awardsCache")
     private final AwardsCache awardsCache;
@@ -51,14 +48,10 @@ public class EmployeeController {
     		EmployeeService employeeService,
     		OrganizationService organizationService,
     		ConversionService conversionService,
-    		//ActivityRepository activityRepository,
-    		//MessageBroker messageBroker,  
     		AwardsCache awardsCache) {
     	this.employeeService = employeeService;
     	this.organizationService = organizationService;
     	this.conversionService = conversionService;
-    	//this.activityRepository = activityRepository;
-    	//this.messageBroker = messageBroker;
     	this.awardsCache = awardsCache;
     }
     

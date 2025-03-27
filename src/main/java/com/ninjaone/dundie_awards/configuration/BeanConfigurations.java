@@ -18,11 +18,13 @@ public class BeanConfigurations {
 	private final ActivityService activityService;
 	private final OrganizationBusinessService organizationBusinessService;
 	
+	// Constructor dependency injection
 	public BeanConfigurations (ActivityService activityService, OrganizationBusinessService organizationBusinessService) {
 		this.activityService = activityService;
 		this.organizationBusinessService = organizationBusinessService;
 	}
 
+	// Awards cache singleton bean
     @Bean(name = "awardsCache")
     @Order(Ordered.LOWEST_PRECEDENCE)
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -30,6 +32,7 @@ public class BeanConfigurations {
         return new AwardsCache();
     }
 
+    // Message broker singleton bean
     @Bean(name = "messageBroker")
     @Order(Ordered.LOWEST_PRECEDENCE)
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)

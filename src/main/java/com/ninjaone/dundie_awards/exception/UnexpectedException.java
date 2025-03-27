@@ -1,5 +1,8 @@
 package com.ninjaone.dundie_awards.exception;
 
+/**
+ * Unexpected exception
+ */
 public class UnexpectedException extends Exception {
 	private static final long serialVersionUID = 1L;
 

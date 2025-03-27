@@ -2,6 +2,9 @@ package com.ninjaone.dundie_awards.dto;
 
 import java.time.LocalDateTime;
 
+/**
+ * Activity DTO class
+ */
 public class ActivityDto {
 
     private long id;

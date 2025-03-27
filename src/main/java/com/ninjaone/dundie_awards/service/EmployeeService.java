@@ -20,6 +20,9 @@ import com.ninjaone.dundie_awards.repository.OrganizationRepository;
 
 import io.swagger.v3.oas.annotations.Parameter;
 
+/**
+ * Employee service 
+ */
 @Service
 public class EmployeeService {
 	private final EmployeeRepository employeeRepository;

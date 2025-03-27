@@ -4,6 +4,9 @@ import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 
+/**
+ * Class to handle message broker session connection
+ */
 public class MessageSessionHandler extends StompSessionHandlerAdapter {
 	private StompSession session;
 

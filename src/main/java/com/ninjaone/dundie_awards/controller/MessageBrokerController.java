@@ -8,8 +8,8 @@ import com.ninjaone.dundie_awards.dto.ActivityDto;
 
 @Controller
 public class MessageBrokerController {
-
-
+	
+  // Endpoint to send a message to the message queue
   @MessageMapping("/message")
   @SendTo("/topic/messages")
   public ActivityDto message(ActivityDto activity) throws Exception {

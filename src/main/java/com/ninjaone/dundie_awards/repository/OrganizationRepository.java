@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import com.ninjaone.dundie_awards.model.Organization;
 
+/**
+ * Organization repository
+ */
 @Repository
 public interface OrganizationRepository extends JpaRepository<Organization, Long> {
 	public List<Organization> findByName(String name); 

@@ -2,7 +2,9 @@ package com.ninjaone.dundie_awards;
 
 import org.springframework.stereotype.Component;
 
-
+/**
+ * Total dundie awards cache
+ */
 @Component
 public class AwardsCache {
     private int totalAwards;

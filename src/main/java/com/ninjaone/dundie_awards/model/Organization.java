@@ -4,6 +4,9 @@ import java.util.Set;
 
 import jakarta.persistence.*;
 
+/**
+ * Organization entity
+ */
 @Entity
 @Table(name = "organizations")
 public class Organization {
